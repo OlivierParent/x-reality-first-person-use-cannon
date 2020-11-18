@@ -2,20 +2,21 @@ import * as THREE from "three";
 import { usePlane } from "@react-three/cannon";
 import { Plane } from "@react-three/drei";
 
+const PLANE_SIZE = 10;
+
 export default (props) => {
+  const args = [PLANE_SIZE, PLANE_SIZE];
+  const mass = 0; // kg
+  const rotation = [THREE.MathUtils.degToRad(-90), 0, 0];
   const [ref] = usePlane(() => ({
     ...props,
-    mass: 0,
-    rotation: [THREE.MathUtils.degToRad(-90), 0, 0],
+    mass,
+    rotation,
   }));
 
   return (
-    <Plane args={[10, 10]} ref={ref}>
-      <meshBasicMaterial
-        color={0xcccccc}
-        side={THREE.DoubleSide}
-        wireframe={false}
-      />
+    <Plane args={args} ref={ref}>
+      <meshBasicMaterial color={0x666666} side={THREE.DoubleSide} />
     </Plane>
   );
 };

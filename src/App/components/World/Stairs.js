@@ -3,19 +3,21 @@ import { useBox } from "@react-three/cannon";
 import { Box } from "@react-three/drei";
 
 export default (props) => {
-  const args = [2, 0.025, 10];
-  const rotation = [THREE.MathUtils.degToRad(35), 0, 0];
+  const angleSlope = 35;
+  const angle = THREE.MathUtils.degToRad(-90 + angleSlope);
+  const args = [1, 10, 0.2];
+  const mass = 0;
+  const rotation = [angle, 0, 0];
   const [ref] = useBox(() => ({
     ...props,
     args,
-    mass: 0,
+    mass,
     rotation,
   }));
 
   return (
-    <mesh ref={ref}>
-      <boxBufferGeometry args={args} />
-      <meshBasicMaterial color={0x666666} side={THREE.DoubleSide} />
-    </mesh>
+    <Box args={args} ref={ref}>
+      <meshBasicMaterial color={0x999999} side={THREE.DoubleSide} />
+    </Box>
   );
 };

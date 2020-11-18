@@ -5,29 +5,17 @@ import Floor from "./Floor";
 import Player from "./Player";
 import Stairs from "./Stairs";
 
+const GRAVITATIONAL_ACCELERATION = 9.80665; // m/s^2
+
 export default () => {
+  const gravity = [0, -GRAVITATIONAL_ACCELERATION, 0];
   return (
     <>
-      <Physics
-        // allowSleep={false}
-        // iterations={10}
-        // defaultContactMaterial={
-        //   {
-        //     // friction: 0,
-        //     // restitution: 0.7,
-        //     // contactEquationStiffness: 1e7,
-        //     // contactEquationRelaxation: 1,
-        //     // frictionEquationStiffness: 1e7,
-        //     // frictionEquationRelaxation: 2,
-        //   }
-        // }
-        gravity={[0, -9.80665, 0]}
-        // tolerance={0.0001}
-      >
+      <Physics gravity={gravity}>
+        <Boxes />
         <Floor />
-        <Stairs />
         <Player />
-        {/* <Boxes /> */}
+        <Stairs />
       </Physics>
     </>
   );

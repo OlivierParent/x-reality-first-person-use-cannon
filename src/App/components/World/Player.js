@@ -5,13 +5,21 @@ import { useFrame } from "react-three-fiber";
 import { PointerLockControls, Sphere } from "@react-three/drei";
 import { KeyboardControls } from "App/lib";
 
+const BOX_SIZE = 0.5; // m
+const FORCE_FORWARD_DIRECTION = 3;
+const FORCE_RIGHT_DIRECTION = 1;
+
 export default (props) => {
   console.log("Physics");
   const pointerRef = useRef();
+  const args = BOX_SIZE; // radius in m
+  const mass = 75; // kg
+  const position = [0, 5, 2];
   const [playerRef, playerApi] = useSphere(() => ({
     ...props,
-    mass: 75,
-    position: [0, 5, 2],
+    args,
+    mass,
+    position,
   }));
 
   useEffect(() => {
@@ -22,50 +30,38 @@ export default (props) => {
     return KeyboardControls.removeEventListeners;
   }, []);
 
-  useEffect(() => {
-    console.info("useEffect: pointerRef");
-    if (pointerRef.current) {
-      pointerRef.current.getObject().position.y = 1.75; // m
-    }
-  }, []);
-
   const velocity = useRef([0, 0, 0]);
   useEffect(() => {
     playerApi.velocity.subscribe((v) => (velocity.current = v));
   }, []);
 
   useFrame(() => {
+    const camera = pointerRef.current.getObject();
+    const player = playerRef.current;
+
     // Match Player direction to Camera direction.
-    playerRef.current.quaternion.copy(
-      pointerRef.current.getObject().quaternion
-    );
+    player.quaternion.copy(camera.quaternion);
 
     // Move Player
-    const force = 3;
-    const forceThreeVec = new THREE.Vector3(
-      KeyboardControls.rightDirection * 1,
+    const velocityVector = new THREE.Vector3(
+      KeyboardControls.rightDirection * FORCE_RIGHT_DIRECTION,
       0,
-      -KeyboardControls.forwardDirection * force
+      KeyboardControls.forwardDirection * -FORCE_FORWARD_DIRECTION
     );
-    forceThreeVec.applyQuaternion(playerRef.current.quaternion);
-    forceThreeVec.y = velocity.current[1];
-    playerApi.velocity.copy(forceThreeVec);
+    velocityVector.applyQuaternion(player.quaternion);
+    velocityVector.y = velocity.current[1];
+    playerApi.velocity.copy(velocityVector);
 
-    pointerRef.current
-      .getObject()
-      .position.copy(
-        new THREE.Vector3(
-          playerRef.current.position.x,
-          playerRef.current.position.y + 0.75,
-          playerRef.current.position.z
-        )
-      );
+    camera.position.copy(player.position);
+    camera.position.y += 1.25; // 1,75 m
   });
 
   return (
     <>
       <PointerLockControls ref={pointerRef} />
-      <Sphere args={[0.5, 32, 32]} ref={playerRef} />
+      <Sphere args={[BOX_SIZE, 8, 8]} ref={playerRef}>
+        <meshBasicMaterial color={0x00ff00} wireframe={true} />
+      </Sphere>
     </>
   );
 };
