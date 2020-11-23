@@ -30,6 +30,7 @@ export default (props) => {
     return KeyboardControls.removeEventListeners;
   }, []);
 
+  // Store Player velocity
   const velocity = useRef([0, 0, 0]);
   useEffect(() => {
     playerApi.velocity.subscribe((v) => (velocity.current = v));
@@ -49,9 +50,10 @@ export default (props) => {
       KeyboardControls.forwardDirection * -FORCE_FORWARD_DIRECTION
     );
     velocityVector.applyQuaternion(player.quaternion);
-    velocityVector.y = velocity.current[1];
+    velocityVector.y = velocity.current[1]; // Use stored velocity in Y direction (gravity)
     playerApi.velocity.copy(velocityVector);
 
+    // Match Camera position to Player position.
     camera.position.copy(player.position);
     camera.position.y += 1.25; // 1,75 m
   });

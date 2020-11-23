@@ -6,7 +6,7 @@ export default (props) => {
   const angleSlope = 35;
   const angle = THREE.MathUtils.degToRad(-90 + angleSlope);
   const args = [1, 10, 0.2];
-  const mass = 0;
+  const mass = 0; // kg
   const rotation = [angle, 0, 0];
   const [ref] = useBox(() => ({
     ...props,
@@ -17,7 +17,7 @@ export default (props) => {
 
   return (
     <Box args={args} ref={ref}>
-      <meshBasicMaterial color={0x999999} side={THREE.DoubleSide} />
+      <meshBasicMaterial color={0x999999} opacity={0.25} transparent={true} />
     </Box>
   );
 };

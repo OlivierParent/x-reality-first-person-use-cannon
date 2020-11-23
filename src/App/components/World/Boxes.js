@@ -33,7 +33,11 @@ export default (props) => {
         console.log("Box:", index);
         return (
           <Box args={args} key={index} ref={box.ref}>
-            <meshBasicMaterial color={0xffffff * Math.random()} />
+            <meshBasicMaterial
+              color={0xffffff * Math.random()}
+              opacity={0.75}
+              transparent={true}
+            />
           </Box>
         );
       })}
