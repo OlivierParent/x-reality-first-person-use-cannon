@@ -6,7 +6,7 @@
 
 ## Configuration
 
-In the file `package.json`: change `"homepage": "/x-reality-first-person"` to the URL of your personal GitHub Pages.
+In the file `package.json`: change `"homepage": "/x-reality-first-person-use-cannon"` to the URL of your personal GitHub Pages.
 
 ## Develop
 
