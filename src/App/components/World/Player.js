@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { useSphere } from "@react-three/cannon";
 import { useFrame } from "react-three-fiber";
+import { useSphere } from "@react-three/cannon";
 import { PointerLockControls, Sphere } from "@react-three/drei";
 import { KeyboardControls } from "App/lib";
 
 const BOX_SIZE = 0.5; // m
-const FORCE_FORWARD_DIRECTION = 3;
-const FORCE_RIGHT_DIRECTION = 1;
+const VELOCITY = {
+  FORWARD_DIRECTION: 3,
+  RIGHT_DIRECTION: 1,
+};
 
 export default (props) => {
   console.log("Physics");
@@ -45,12 +47,12 @@ export default (props) => {
 
     // Move Player
     const velocityVector = new THREE.Vector3(
-      KeyboardControls.rightDirection * FORCE_RIGHT_DIRECTION,
+      KeyboardControls.rightDirection * VELOCITY.RIGHT_DIRECTION,
       0,
-      KeyboardControls.forwardDirection * -FORCE_FORWARD_DIRECTION
+      KeyboardControls.forwardDirection * -VELOCITY.FORWARD_DIRECTION
     );
     velocityVector.applyQuaternion(player.quaternion);
-    velocityVector.y = velocity.current[1]; // Use stored velocity in Y direction (gravity)
+    velocityVector.y = velocity.current[1]; // Use stored velocity in Y direction (gravity).
     playerApi.velocity.copy(velocityVector);
 
     // Match Camera position to Player position.
